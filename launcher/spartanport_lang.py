@@ -2654,8 +2654,8 @@ EXTRA.setdefault('pt', {}).update({
         'Câmera livre: liga/desliga',
     'Tap R3':
         'Toque no R3',
-    "Experimental. The right stick or the mouse turns the camera all the way around Kratos and Kratos moves the way the camera looks; L1 + right stick dodges. In play, the Free camera key (G) or a tap of R3 on the gamepad switches it off and on, for boss fights; quick-time events and the game's camera cuts go back to the game's camera. Also in the in-game menu.":
-        'Experimental. O analógico direito ou o mouse gira a câmera em volta do Kratos, por completo, e o Kratos anda para onde a câmera olha; L1 + analógico direito faz a esquiva. No jogo, a tecla da câmera livre (G) ou um toque no R3 do controle a desliga e liga, para as lutas de chefe; os quick-time events e os cortes de câmera do jogo voltam à câmera do jogo. Também no menu do jogo.',
+    "Experimental. The right stick or the mouse turns the camera all the way around Kratos and Kratos moves the way the camera looks; L1 + right stick dodges. In play, the Free camera key (G by default) or a tap of R3 on the gamepad switches it off and on, for boss fights; quick-time events and the game's camera cuts go back to the game's camera. Also in the in-game menu.":
+        'Experimental. O analógico direito ou o mouse gira a câmera em volta do Kratos, por completo, e o Kratos anda para onde a câmera olha; L1 + analógico direito faz a esquiva. No jogo, a tecla da câmera livre (G por padrão) ou um toque no R3 do controle a desliga e liga, para as lutas de chefe; os quick-time events e os cortes de câmera do jogo voltam à câmera do jogo. Também no menu do jogo.',
 })
 
 EXTRA.setdefault('es', {}).update({
@@ -2665,8 +2665,8 @@ EXTRA.setdefault('es', {}).update({
         'Cámara libre: activar/desactivar',
     'Tap R3':
         'Toque de R3',
-    "Experimental. The right stick or the mouse turns the camera all the way around Kratos and Kratos moves the way the camera looks; L1 + right stick dodges. In play, the Free camera key (G) or a tap of R3 on the gamepad switches it off and on, for boss fights; quick-time events and the game's camera cuts go back to the game's camera. Also in the in-game menu.":
-        'Experimental. El stick derecho o el ratón gira la cámara alrededor de Kratos, por completo, y Kratos se mueve hacia donde mira la cámara; L1 + stick derecho esquiva. En el juego, la tecla de la cámara libre (G) o un toque de R3 en el mando la desactiva y activa, para las peleas contra jefes; los quick-time events y los cortes de cámara del juego vuelven a la cámara del juego. También en el menú del juego.',
+    "Experimental. The right stick or the mouse turns the camera all the way around Kratos and Kratos moves the way the camera looks; L1 + right stick dodges. In play, the Free camera key (G by default) or a tap of R3 on the gamepad switches it off and on, for boss fights; quick-time events and the game's camera cuts go back to the game's camera. Also in the in-game menu.":
+        'Experimental. El stick derecho o el ratón gira la cámara alrededor de Kratos, por completo, y Kratos se mueve hacia donde mira la cámara; L1 + stick derecho esquiva. En el juego, la tecla de la cámara libre (G por defecto) o un toque de R3 en el mando la desactiva y activa, para las peleas contra jefes; los quick-time events y los cortes de cámara del juego vuelven a la cámara del juego. También en el menú del juego.',
 })
 
 EXTRA.setdefault('pt', {}).update({
@@ -2740,9 +2740,9 @@ EXTRA['zh'].update({
     'Free camera (experimental)': '自由镜头（实验性）',
     'Free camera on/off': '自由镜头：开/关',
     'Tap R3': '轻按 R3',
-    "Experimental. The right stick or the mouse turns the camera all the way around Kratos and Kratos moves the way the camera looks; L1 + right stick dodges. In play, the Free camera key (G) or a tap of R3 on the gamepad switches it off and on, for boss fights; quick-time events and the game's camera cuts go back to the game's camera. Also in the in-game menu.":
+    "Experimental. The right stick or the mouse turns the camera all the way around Kratos and Kratos moves the way the camera looks; L1 + right stick dodges. In play, the Free camera key (G by default) or a tap of R3 on the gamepad switches it off and on, for boss fights; quick-time events and the game's camera cuts go back to the game's camera. Also in the in-game menu.":
         '实验性功能。右摇杆或鼠标可让镜头围绕奎托斯完整旋转，奎托斯会朝镜头所看的方向移动；L1 + 右摇杆为闪避。'
-        '游戏中，自由镜头按键（G）或轻按手柄上的 R3 可将其关闭和开启，适用于首领战；快速反应事件和游戏自带的'
+        '游戏中，自由镜头按键（默认为 G）或轻按手柄上的 R3 可将其关闭和开启，适用于首领战；快速反应事件和游戏自带的'
         '镜头切换会回到游戏的镜头。游戏内菜单中也有此选项。',
 })
 
@@ -2750,9 +2750,9 @@ EXTRA['id'].update({
     'Free camera (experimental)': 'Kamera bebas (eksperimental)',
     'Free camera on/off': 'Kamera bebas: nyala/mati',
     'Tap R3': 'Ketuk R3',
-    "Experimental. The right stick or the mouse turns the camera all the way around Kratos and Kratos moves the way the camera looks; L1 + right stick dodges. In play, the Free camera key (G) or a tap of R3 on the gamepad switches it off and on, for boss fights; quick-time events and the game's camera cuts go back to the game's camera. Also in the in-game menu.":
+    "Experimental. The right stick or the mouse turns the camera all the way around Kratos and Kratos moves the way the camera looks; L1 + right stick dodges. In play, the Free camera key (G by default) or a tap of R3 on the gamepad switches it off and on, for boss fights; quick-time events and the game's camera cuts go back to the game's camera. Also in the in-game menu.":
         'Eksperimental. Stik kanan atau mouse memutar kamera sepenuhnya di sekitar Kratos, dan Kratos bergerak ke '
-        'arah pandangan kamera; L1 + stik kanan untuk menghindar. Dalam permainan, tombol Kamera bebas (G) atau '
+        'arah pandangan kamera; L1 + stik kanan untuk menghindar. Dalam permainan, tombol Kamera bebas (bawaan G) atau '
         'ketukan R3 pada gamepad mematikan dan menyalakannya, untuk pertarungan bos; quick-time event dan potongan '
         'kamera game kembali ke kamera game. Juga tersedia di menu dalam game.',
 })

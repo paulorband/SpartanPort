@@ -2461,7 +2461,10 @@ pub fn native_cheats(
         e.end();
         e.navigation(name, row, &targets)?;
         if index < 7 {
-            for (kind, function) in [("left", control_change(index, -1)), ("right", control_change(index, 1))] {
+            for (kind, function) in [
+                ("left", control_change(index, -1)),
+                ("right", control_change(index, 1)),
+            ] {
                 e.begin(name, kind);
                 e.call(repeat);
                 e.builtin(function, true)?;

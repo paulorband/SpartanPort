@@ -204,18 +204,21 @@ Para uma pessoa que já conhece os hooks do port e faz RE em x86-64 (IDA/Ghidra 
 - [x] Em `runtime_pad.c`: com a opção ligada, o analógico direito físico alimenta yaw/pitch (zona morta,
       curva, velocidade) e é zerado antes de chegar ao jogo — exceto com L2 (mira), em QTE de rotação e
       durante a esquiva sintetizada.
-- [x] Esquiva (decidido: L1 + analógico direito, girado pela câmera; G/toque no R3 desligam a câmera livre): no controle, novo mapeamento padrão (a definir na fase 0 com quem joga; candidatos R3 ou
-      um botão traseiro) reutilizando `apply_dodge`; no teclado já existe (`Mouse Back`).
-- [x] Mouse: movimento relativo (`mouse_motion`) vira yaw/pitch fora do L2; sensibilidade e inversão de
-      Y próprias da câmera. (Feito com a sensibilidade da mira; sem inversão de Y própria.)
+- [x] Esquiva: no controle, a do próprio jogo, L1 + analógico direito, com o analógico girado pelo yaw
+      da câmera; no teclado continua a de `apply_dodge` (`Mouse Back`). O R3 não esquiva: um toque nele
+      sozinho, ou a tecla G, liga e desliga a câmera livre.
+- [x] Mouse: movimento relativo (`mouse_motion`) vira yaw/pitch fora do L2, com a mesma sensibilidade
+      da mira (*Right stick sensitivity*); não há inversão de Y própria da câmera.
 - [x] Testes em `tests/test_pad.c`/`test_pad_map.c`: o jogo não vê o analógico direito com a opção
       ligada, vê com L2, vê a esquiva.
 
 ### Fase 3 — Contextos e retorno
 
-- [x] Desligar e voltar suavemente (ex.: 0,3 s) quando: QTE ativo, menu do jogo, L2, cinemática (FOV
-      estreito ou câmera sinalizada), troca de câmera do jogo (corte de cena). (QTE, menu de pausa,
-      tela inicial, L2 e cortes; a cinemática pelo FOV não foi preciso.)
+- [x] Desligar e voltar suavemente (ex.: 0,3 s) quando: QTE ativo, menu do jogo, cinemática (FOV
+      estreito ou câmera sinalizada), troca de câmera do jogo (corte de cena). (Feito para QTE, menu de
+      pausa, tela inicial e cortes; a cinemática pelo FOV não foi preciso.) Com L2 (mira) a câmera não
+      volta: fica parada no ângulo em que estava e o analógico direito vai para a mira do jogo; falta
+      testar se a mira dos itens acerta com a câmera girada (seção 6).
 - [x] Limites de yaw/pitch configuráveis (`SPARTAN_FREE_CAMERA_LIMITS`). O retorno automático ao
       enquadramento original após N segundos sem entrada ficou de fora; o jogador pediu, para
       depois, um "seguir por trás" (seção 6).
@@ -225,8 +228,10 @@ Para uma pessoa que já conhece os hooks do port e faz RE em x86-64 (IDA/Ghidra 
 
 - [x] Menu do jogo (`gpu/shim/spartanport_overlay.cpp`, `spartanport_settings.cpp`) e página Controls
       do launcher (`launcher-rust/src/ui/pages/controls.rs`, `launcher-rust/src/core/controls.rs`):
-      ligar/desligar, sensibilidade analógico/mouse, inverter Y, limites, mapeamento da esquiva.
-      (Feito: ligar/desligar no launcher, no menu do port e em Opções → Controles; a tecla G remapeável.)
+      ligar/desligar no launcher, no menu do port e em Opções → Controles; no launcher, também a tecla
+      da câmera (G por padrão, remapeável) e o mapeamento da esquiva. A sensibilidade é a da mira,
+      compartilhada; não há inversão de Y própria; os limites de yaw/pitch ficam só na variável de
+      ambiente `SPARTAN_FREE_CAMERA_LIMITS`.
 - [x] README (3 idiomas): opção, limitações conhecidas, que é experimental.
 
 ### Fase 5 — Validação
@@ -245,4 +250,6 @@ Em aberto:
 - Detectar luta de chefe (e quedas/sequências roteirizadas) para voltar à câmera do jogo sozinho.
 - "Seguir por trás": a câmera voltar devagar para trás do Kratos quando ele anda e o jogador solta o
   analógico.
+- A mira com L2 (Cabeça de Hélio, arco) com a câmera girada: ela fica no ângulo da câmera livre; se a
+  mira do jogo usar a câmera original, o L2 deveria devolver a câmera do jogo, como o QTE.
 - Validação do jogo inteiro (fase 5) e áreas onde a opção deveria ficar desligada.
