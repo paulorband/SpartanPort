@@ -753,7 +753,7 @@ static int install_jump(uint64_t at, unsigned length, unsigned char *stub) {
 
 /* Free camera (src/camera_hook.h): the gameplay camera goes through the port when the controller
  * writes its node and when the view is built from it. Both or neither. Installed whenever the code
- * matches; it changes nothing until the state is enabled (SPARTAN_FREE_CAMERA, ..._DEBUG). */
+ * and Kratos match; it changes nothing until the state is enabled (SPARTAN_FREE_CAMERA, ..._DEBUG). */
 static void install_camera_hook(Segment *segments, uint64_t count, uint64_t size) {
     const uint64_t at = spartanport_signature_find(image, size, &spartanport_camera_site);
     const uint64_t lea = spartanport_signature_find(image, size, &spartanport_camera_view_site);
@@ -772,6 +772,16 @@ static void install_camera_hook(Segment *segments, uint64_t count, uint64_t size
         printf("Free camera: unavailable (view global outside the image)\n");
         return;
     }
+    /* Kratos (the camera's target node): the orbit's pivot, the floor and the walls' cast start from
+     * him; without him the camera would turn around a point ahead of it. */
+    const uint64_t player = spartanport_signature_find(image, size, &spartanport_camera_player_site);
+    const uint64_t player_global = player != UINT64_MAX && mapped(segments, count, player, SPARTAN_CAMERA_GLOBAL_NEXT)
+                                       ? spartanport_camera_view_global(image + player, player)
+                                       : UINT64_MAX;
+    if (player_global == UINT64_MAX || !mapped(segments, count, player_global, 8)) {
+        printf("Free camera: unavailable (Kratos not found)\n");
+        return;
+    }
     const uint64_t counter = spartanport_camera_controller_counter(image + controller, controller);
     unsigned char *stub = allocate(page_size);
     spartanport_camera_build_stub(stub, (uintptr_t)spartanport_camera_apply,
@@ -781,13 +791,11 @@ static void install_camera_hook(Segment *segments, uint64_t count, uint64_t size
                                              (uintptr_t)(image + controller + SPARTAN_CAMERA_CONTROLLER_LENGTH));
     spartanport_camera_set_view_global((uintptr_t)(image + global));
     spartanport_camera_set_image((uintptr_t)image, size);
-    const uint64_t player = spartanport_signature_find(image, size, &spartanport_camera_player_site);
-    if (player != UINT64_MAX && mapped(segments, count, player, SPARTAN_CAMERA_GLOBAL_NEXT)) {
-        const uint64_t player_global = spartanport_camera_view_global(image + player, player);
-        if (mapped(segments, count, player_global, 8)) spartanport_camera_set_player_global((uintptr_t)(image + player_global));
-    }
-    /* The level's raycast: the free camera stops short of walls with it (none: it goes through them). */
+    spartanport_camera_set_player_global((uintptr_t)(image + player_global));
+    /* The level's raycast: the free camera stops short of walls with it (none: it goes through them,
+     * still usable, as before the walls). */
     const uint64_t ray = spartanport_signature_find(image, size, &spartanport_camera_ray_site);
+    int walls = 0;
     if (ray != UINT64_MAX && mapped(segments, count, ray, SPARTAN_CAMERA_RAY_FILTER_LEA + SPARTAN_CAMERA_RAY_LEA_LENGTH) &&
         spartanport_camera_ray_match(image + ray, size - ray)) {
         const uint64_t filter = spartanport_camera_ray_global(image + ray, ray, SPARTAN_CAMERA_RAY_FILTER_LEA);
@@ -795,9 +803,10 @@ static void install_camera_hook(Segment *segments, uint64_t count, uint64_t size
         if (mapped(segments, count, filter, SPARTAN_CAMERA_RAY_FILTER_SIZE) &&
             mapped(segments, count, hit, SPARTAN_CAMERA_RAY_RESULT_SIZE)) {
             spartanport_camera_set_ray((uintptr_t)(image + ray), (uintptr_t)(image + filter), (uintptr_t)(image + hit));
-            printf("Free camera: walls stop it (the level's raycast)\n");
+            walls = 1;
         }
     }
+    printf("Free camera: %s\n", walls ? "walls stop it (the level's raycast)" : "walls do not stop it (raycast not found)");
     protect(stub, page_size, 5);
     const int64_t reach[2] = {(int64_t)(uintptr_t)stub - (int64_t)(uintptr_t)(image + at + 5),
                               (int64_t)(uintptr_t)(stub + 128) - (int64_t)(uintptr_t)(image + controller + 5)};
