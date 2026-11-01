@@ -178,8 +178,8 @@ Para uma pessoa que já conhece os hooks do port e faz RE em x86-64 (IDA/Ghidra 
   desligar o motion blur inteiro é a do `main` (`src/graphics_hook.h`, no mesmo update
   `MotionBlurFX`, `0x16ae80`).
 - **Opção (testada no jogo):** `free_camera` no `spartanport.ini` (`SPARTAN_FREE_CAMERA`); caixa na
-  página Controls do launcher (Rust e Python), linha na seção *Controller* do menu do port e sétima
-  linha de Opções → Controles do jogo (builtins `0xf6d` lê, `0xf6e` lê com setas, `0xf6f` alterna; os
+  página Controls do launcher (só o Rust: desde a 3.0.0 o Python fica congelado), linha na seção
+  *Controller* do menu do port e sétima linha de Opções → Controles do jogo (builtins `0xf6d` lê, `0xf6e` lê com setas, `0xf6f` alterna; os
   `0xf61..0xf6c` são do Display do `main`; patch do `R_UI.WAD` versão 25). "Restaurar padrões dos
   controles" desliga.
 - **Problemas que ficaram:**
