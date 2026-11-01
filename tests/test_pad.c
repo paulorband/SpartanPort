@@ -641,11 +641,36 @@ int main(void) {
     usleep(220000);
     data=read_pad();
     assert(data.buttons==0 && data.touch_count==0);
+    /* Free camera: a tap of R3 alone switches it; R3 with L2 (the port's menu) or R2 (the trophy
+     * list) does not, though overlay_chords has hidden that trigger from the game by then. */
+    camera_stick=1;
+    const int toggles=camera_toggles;
+    assert(SDL_SetJoystickVirtualButton(joystick,SDL_GAMEPAD_BUTTON_RIGHT_STICK,true));
+    pump();
+    data=read_pad();
+    assert(SDL_SetJoystickVirtualButton(joystick,SDL_GAMEPAD_BUTTON_RIGHT_STICK,false));
+    pump();
+    data=read_pad();
+    assert(camera_toggles==toggles+1);
+    const SDL_GamepadAxis triggers[]={SDL_GAMEPAD_AXIS_LEFT_TRIGGER,SDL_GAMEPAD_AXIS_RIGHT_TRIGGER};
+    for (int i=0;i<2;++i) {
+        assert(SDL_SetJoystickVirtualButton(joystick,SDL_GAMEPAD_BUTTON_RIGHT_STICK,true));
+        assert(SDL_SetJoystickVirtualAxis(joystick,triggers[i],32767));
+        pump();
+        data=read_pad();
+        assert(!(data.buttons & (BTN_L2|BTN_R2)));
+        assert(SDL_SetJoystickVirtualButton(joystick,SDL_GAMEPAD_BUTTON_RIGHT_STICK,false));
+        assert(SDL_SetJoystickVirtualAxis(joystick,triggers[i],0));
+        pump();
+        data=read_pad();
+        assert(camera_toggles==toggles+1);
+    }
+    camera_stick=0;
     SDL_CloseJoystick(joystick);
     if (gamepad) SDL_CloseGamepad(gamepad);
     gamepad=NULL;
     assert(SDL_DetachVirtualJoystick(id));
     SDL_Quit();
     unlink(path);
-    puts("PASS: pad ABI, staged left/right clicks, L1 chord, engine frame rate combo, QTE frame rate cap (all prompt kinds), free camera stick, SDL touch coordinates, overlay capture, switch attacks");
+    puts("PASS: pad ABI, staged left/right clicks, L1 chord, engine frame rate combo, QTE frame rate cap (all prompt kinds), free camera stick and R3 tap, SDL touch coordinates, overlay capture, switch attacks");
 }

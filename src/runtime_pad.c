@@ -828,6 +828,7 @@ static void apply_dodge(PadData *d) {
 enum { CAMERA_DEADZONE=24, CAMERA_TAP_US=400000 };
 static uint64_t camera_last;
 static struct { bool key_held, r3_held, r3_alone; uint64_t r3_since; } camera_toggle;
+static uint32_t overlay_chord_hidden;  /* overlay_chords: the R3 chord's buttons hidden from the game */
 static float camera_axis(uint8_t value) {
     const int v=value-128;
     if (abs(v)<CAMERA_DEADZONE) return 0;
@@ -883,12 +884,13 @@ static void apply_free_camera(PadData *d) {
     d->buttons&=~CAMERA_TOGGLE;
     if (!spartanport_camera_stick_enabled()) return;
     /* The toggle: the keyboard's camera key, or a tap of the pad's R3 alone (R3 with L3 is Rage of
-     * Sparta, with L2 the settings menu, with L1 and R1 the frame rate; R3 still reaches the game). */
+     * Sparta, with L2 the settings menu and R2 the trophy list, with L1 and R1 the frame rate; R3
+     * still reaches the game). overlay_chords has already hidden the chord's trigger: it counts too. */
     if (key && !camera_toggle.key_held) spartanport_camera_toggle();
     camera_toggle.key_held=key;
     const bool r3=(pad_held & BTN_R3)!=0;
     if (r3 && !camera_toggle.r3_held) { camera_toggle.r3_since=d->timestamp; camera_toggle.r3_alone=true; }
-    if (r3 && (d->buttons & (BTN_L1|BTN_R1|BTN_L2|BTN_L3))) camera_toggle.r3_alone=false;
+    if (r3 && ((d->buttons|overlay_chord_hidden) & (BTN_L1|BTN_R1|BTN_L2|BTN_R2|BTN_L3))) camera_toggle.r3_alone=false;
     if (!r3 && camera_toggle.r3_held && camera_toggle.r3_alone && d->timestamp-camera_toggle.r3_since<CAMERA_TAP_US)
         spartanport_camera_toggle();
     camera_toggle.r3_held=r3;
@@ -1134,7 +1136,6 @@ static void engine_fps_combo(PadData *d) {
  * at half a pull, while the game takes a trigger from a slight one. With R3 held, the trigger and
  * R3 stay hidden from the game until each one is released: a stray R2 uses the item. */
 enum { OVERLAY_TRIGGERS=BTN_L2|BTN_R2 };
-static uint32_t overlay_chord_hidden;
 static void overlay_chords(PadData *d) {
     if ((d->buttons & BTN_R3) && (d->buttons & OVERLAY_TRIGGERS))
         overlay_chord_hidden|=BTN_R3|(d->buttons & OVERLAY_TRIGGERS);
